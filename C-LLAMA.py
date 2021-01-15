@@ -24,6 +24,7 @@ try:
     import matplotlib.pyplot as plt
 
     import initialise
+    import model_params
 
     # stage 1
     import lib.mod.dev_metric
@@ -55,7 +56,7 @@ try:
     initialise.population_sort()
     area_index = initialise.generate_area_index()
 
-    print(area_index.info())
+    io.dirs(model_params.land_use_data_out_path)
 
     # main loop
     def stage_1():

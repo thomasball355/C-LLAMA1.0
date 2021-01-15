@@ -16,8 +16,6 @@ from matplotlib import cm
 from matplotlib import colors as mpl_col
 import seaborn as sns
 
-import lib.progressbar as progressbar
-
 import lib.funcs.perc_contributions_WRAP as perc_contributions_WRAP
 import lib.funcs.foodsupply_trajectory as foodsupply_trajectory
 import lib.funcs.dat_io as io

@@ -177,39 +177,39 @@ def generate_area_index():
         index_col = ["Area", 'Item Code',
         'Item', 'Element Code', 'Element', 'Unit'])
         land_use_dat = io.re_index_area(land_use_dat)
-    
+
         land_area = land_use_dat.xs("Land area", level = "Item")
-    
+
         cutoff_VANUATU = 1219
-    
+
         land_area_keep = land_area[land_area.mean(axis = 1) > cutoff_VANUATU]
-    
-        return land_area_keep.index.get_level_values("Area").to_list()    
-    
+
+        return land_area_keep.index.get_level_values("Area").to_list()
+
     # keep_list = land_drop()
-    
+
     def prod_drop():
-        prod_africa = pd.read_csv("C-LLAMA\\data\\Production_Crops_E_Africa_NOFLAG.csv",
+        prod_africa = pd.read_csv("data\\Production_Crops_E_Africa_NOFLAG.csv",
                           encoding = "latin-1",
                           index_col=[0,1,2,3,4,5,6])
-        prod_americas = pd.read_csv("C-LLAMA\\data\\Production_Crops_E_Americas_NOFLAG.csv",
+        prod_americas = pd.read_csv("data\\Production_Crops_E_Americas_NOFLAG.csv",
                                   encoding = "latin-1",
                                   index_col=[0,1,2,3,4,5,6])
-        prod_europe = pd.read_csv("C-LLAMA\\data\\Production_Crops_E_Europe_NOFLAG.csv",
+        prod_europe = pd.read_csv("data\\Production_Crops_E_Europe_NOFLAG.csv",
                                   encoding = "latin-1",
                                   index_col=[0,1,2,3,4,5,6])
-        prod_asia = pd.read_csv("C-LLAMA\\data\\Production_Crops_E_Asia_NOFLAG.csv",
+        prod_asia = pd.read_csv("data\\Production_Crops_E_Asia_NOFLAG.csv",
                                   encoding = "latin-1",
                                   index_col=[0,1,2,3,4,5,6])
-        prod_oceania = pd.read_csv("C-LLAMA\\data\\Production_Crops_E_Oceania_NOFLAG.csv",
+        prod_oceania = pd.read_csv("data\\Production_Crops_E_Oceania_NOFLAG.csv",
                                   encoding = "latin-1",
-                                  index_col=[0,1,2,3,4,5,6])       
-        production = pd.concat([prod_africa, 
-                               prod_americas, 
-                               prod_americas, 
-                               prod_europe, 
-                               prod_oceania])       
-        production = production.xs("Production", level = "Element")        
+                                  index_col=[0,1,2,3,4,5,6])
+        production = pd.concat([prod_africa,
+                               prod_americas,
+                               prod_americas,
+                               prod_europe,
+                               prod_oceania])
+        production = production.xs("Production", level = "Element")
         mask = production.index.get_level_values("Item Code").isin(np.arange(0,1000,1))
         production = production[mask]
         production_sum = production.sum(level = "Area")
@@ -219,11 +219,12 @@ def generate_area_index():
         while perc < 99.7:
             perc = np.sum(p2017[:k]) / np.sum(p2017[:]) * 100
             k += 1
-            
-        return p2017[:k].to_list()
-    
+
+        return p2017[:k].index.to_list()
+
     keep_list = prod_drop()
-    
+    keep_list = io.format_upper(keep_list)
+
     area_index_prelim = area_index_prelim[area_index_prelim.index.isin(keep_list)]
 
     dev_met_temp = pd.DataFrame(index = area_index_prelim.index.to_list(), columns = np.arange(1961, 2014, 1))
