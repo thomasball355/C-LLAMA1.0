@@ -4,11 +4,11 @@ __pycache__/
 *$py.class
 
 
-data/Africa/**
-data/Americas/**
-data/Europe/**
-data/Asia/**
-data/Oceania/**
+data/Africa/*
+data/Americas/*
+data/Europe/*
+data/Asia/*
+data/Oceania/*
 
 
 # C extensions
@@ -22,7 +22,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
