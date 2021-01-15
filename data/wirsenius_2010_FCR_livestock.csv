@@ -1,0 +1,22 @@
+Animal system and parameter,Scenario,World average,East Asia,East Europe,Latin America and the Caribbean,North Africa and West Asia,North America and Oceania,South and Central Asia,Sub-Saharan Africa,West Europe
+Cattle whole-milk,1992/1994,2.5,2.9,2.1,3.9,3.8,1.2,4.4,9,1.4
+Cattle whole-milk,REF,2.4,2.2,1.7,3.1,2.3,1.1,3.6,7.1,1.2
+Cattle whole-milk,ILP,1.6,1.4,1.3,1.9,1.9,0.9,2.1,4.3,1
+Buffalo whole-milk,1992/1994,4.2,8.3,,,4.5,,3.9,,
+Buffalo whole-milk,REF,3.2,5.6,,,3,,3,,
+Buffalo whole-milk,ILP,2.3,3.6,,,2.3,,2.2,,
+Beef cattle meat,1992/1994,59,108,38,85,101,27,241,130,27
+Beef cattle meat,REF,50,49,36,64,48,24,146,102,26
+Beef cattle meat,ILP,43,38,34,44,37,23,128,98,24
+Sheep meat,1992/1994,76,83,59,136,68,68,86,124,45
+Sheep meat,REF,53,50,38,99,44,41,58,79,43
+Sheep meat,ILP,45,39,39,79,39,37,43,69,39
+Pork (crude carcass),1992/1994,5.3,6.2,4.6,8.6,,3.7,8.3,9.7,3.9
+Pork (crude carcass),REF,4.3,4.3,4.2,6.1,,3.5,6,8.1,3.6
+Pork (crude carcass),ILP,3.5,3.4,3.6,4.2,,3.3,5.1,7.4,3.3
+Egg,1992/1994,2.9,3,3,2.7,3.3,2.3,3.9,4.1,2.3
+Egg,REF,2.7,2.5,2.7,2.8,2.7,2.3,2.7,4.7,2.3
+Egg,ILP,2.4,2.3,2.4,2.4,2.6,2.2,2.7,3.9,2.2
+Poultry meat,1992/1994,3.5,4.1,3.9,3.6,4.4,2.9,5.2,5.6,2.7
+Poultry meat,REF,3.3,4,3.2,3.1,3.4,2.7,3.4,3.3,2.8
+Poultry meat,ILP,2.6,2.6,2.6,2.5,2.9,2.5,3,3.2,2.5

@@ -3,6 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+data/Africa/**
+data/Americas/**
+data/Europe/**
+data/Asia/**
+data/Oceania/**
+
+
 # C extensions
 *.so
 
