@@ -22,7 +22,6 @@ def main(data, continent, region, area, path):
 
     dev_metric_hist = [0.0 if val(x) < 0 else val(x) if val(x) <= 1.0 else 1.0 for x in total_fs]
 
-    # ADD OUTPUT HIST (FOR TEST)
     dev_hist = io.load("lib\\dat", "dev_met_hist")
     dev_hist.loc[area] = dev_metric_hist
     io.save("lib\\dat", f"dev_met_hist", dev_hist)
@@ -37,24 +36,12 @@ def main(data, continent, region, area, path):
     r           = line_vars[2]
     p           = line_vars[3]
 
-    #print("DEV METRIC STATS slope = " + str(slope))
-
     lin = lambda x: x * slope + intercept
     hist_mean = np.mean(dev_metric_hist[-10:])
-    def linear_proj():
-        if r**2 > 0.2 and p < 0.05:
-            if 0.0 < slope < 0.020:
-                dev_metric_proj = [0.0 if lin(x) <= 0.0 else lin(x) if lin(x) <= 1.0 else 1.0 for x in range(2013, 2051)]
-            else:
-                dev_metric_proj = [0.0 if hist_mean <= 0.0 else hist_mean if hist_mean <= 1.0 else 1.0 for x in range(2013, 2051)]
-        else:
-            dev_metric_proj = [0.0 if hist_mean <= 0.0 else hist_mean if hist_mean <= 1.0 else 1.0 for x in range(2013, 2051)]
-        return dev_metric_proj
 
     def linear_interpolate():
         val_2050 = lin(2050)
         val_2013 = float(dev_metric_hist[-1])
-        #print(val_2013)
         diff = val_2050 - val_2013
         if r**2 > 0.2 and p < 0.05:
             if 0.0 < slope < 0.020:
@@ -68,10 +55,8 @@ def main(data, continent, region, area, path):
 
     dev_metric_proj = linear_interpolate()
 
-
     def plot():
         #area_list = ["CHINAMAINLAND", "UNITEDSTATESOFAMERICA", "NIGER", "BELIZE", "BRAZIL", "JAPAN", "UNITEDKINGDOM", "NIGERIA", "INDIA", "AUSTRALIAANDNEWZEALAND", "CONGO", "ETHOPIA", "CHAD"]
-        area_list = ["CUBA"]
         if area in area_list:
             plt.plot(np.arange(1961, 2013 + 1, 1), dev_metric_hist, marker = "x", linewidth = "0")
             plt.plot(np.arange(2013, 2051, 1), dev_metric_proj)
@@ -79,10 +64,7 @@ def main(data, continent, region, area, path):
             plt.ylabel("Metric")
             plt.ylim(0.0, 1.1)
             plt.xticks(np.arange(1960, 2051, 10))
-
             plt.show()
-            #plt.savefig(f"C:\\Users\\Tom\\OneDrive - University of East Anglia\\FALAFEL_work_shared\\plots\\FALAFEL-WRAP\\dev\\dev_final\\dev_met_{area}.png")
-            #plt.close()
     #plot()
 
     io.save(f"{path}\\dev_metrics", f"dev_metric_{area}", dev_metric_proj)

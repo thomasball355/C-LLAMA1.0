@@ -8,9 +8,6 @@ import lib.funcs.foodsupply_trajectory
 import lib.dat.colours
 import lib.dat.food_commodity_seperation
 
-
-
-# really complex module!
 def main(data, continent, region, path):
 
     regional_max    = data[0].max(axis = 0)

@@ -8,7 +8,6 @@ vegetal_prods = {
                 'Cereals - Excluding Beer'      : '#67A67F',
                 'Palm Oil'                      : '#fe9929',
                 'Rape and Mustardseed'          : '#ec7014',
-                'Oilcrops'                      : '#c7e9b4',
                 'Vegetable Oils'                : '#253494',
                 'Sunflower seed'                : '#993404',
                 'Soyabeans'                     : '#cc4c02',

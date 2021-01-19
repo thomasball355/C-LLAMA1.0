@@ -15,7 +15,7 @@ import lib.dat.food_commodity_seperation
 
 def main(area_index):
 
-    # Butchered from the "diet_makeup" module - largely because doing all this again manually would kill me.
+    # Butchered from the "diet_makeup" module
     def dirs(directory, *args):
         string = f"{directory}\\"
         for arg in args:
@@ -242,7 +242,6 @@ def main(area_index):
                         plt.legend(vegetal_production.T)
                         plt.xticks(vegetal_production.T.index.to_list()[9::10])
                         plt.show()
-                        #plt.savefig(f"C:\\Users\\Tom\\OneDrive - University of East Anglia\\FALAFEL_work_shared\\plots\\FALAFEL-WRAP\\production\\{area}_production.png", dpi = 300)
                 #plot()
 
                 vegetal_commodity_production_5.loc[area] = vegetal_production.iloc[:, :-10].mean(axis = 1)

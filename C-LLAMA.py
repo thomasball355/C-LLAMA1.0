@@ -61,7 +61,7 @@ try:
     # main loop
     def stage_1():
 
-        lib.mod.food_waste_gen.main() # no_change, medium, high
+        lib.mod.food_waste_gen.main()
 
         # Loop over continents
         for continent in lib.dat.continents.continents:

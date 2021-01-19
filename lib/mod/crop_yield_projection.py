@@ -29,11 +29,6 @@ def main(continent, region, area, path):
         years = np.arange(dat_start, dat_end + 1, 1)
         line_params = stat.linregress(years, dat)
         return line_params
-
-    def col_rand(a, b):
-        col = [np.random.randint(a, b)/100, np.random.randint(a, b)/100, np.random.randint(a, b)/100]
-        return col
-
     max_list = {}
 
     for crop in data.index.to_list():
@@ -60,7 +55,13 @@ def main(continent, region, area, path):
         if np.sum(data.loc[crop]) > 0:
             max_list[crop] = regional_max
 
+    io.save(f"{path}\\yield_production", f"yield_projection_{area}", output_data)
+
     def plot():
+
+        def col_rand(a, b):
+            col = [np.random.randint(a, b)/100, np.random.randint(a, b)/100, np.random.randint(a, b)/100]
+            return col
 
         area_list = ["INDIA", "CHINAMAINLAND", "UNITEDSTATESOFAMERICA", "BELIZE", "BRAZIL", "FRANCE"]
 
@@ -68,7 +69,18 @@ def main(continent, region, area, path):
 
             palette = ["#2571FF", "#FF7826", "#FF3325", "#CC2F5F", "#81525A", "#777750", "#51512B", "#5AFF58", "#1FDBFC", "#545557", "#81D517"]
 
-            croplist = ["Sugar cane", "Maize and products", "Rice (Milled Equivalent)", "Wheat and products", "Palm Oil", "Soyabeans", "Potatoes and products", "Cassava and products", "Cereals - Excluding Beer", "Fruits - Excluding Wine", "Vegetables"]
+            croplist = ["Sugar cane",
+                        "Maize and products",
+                        "Rice (Milled Equivalent)",
+                        "Wheat and products",
+                        "Palm Oil",
+                        "Soyabeans",
+                        "Potatoes and products",
+                        "Cassava and products",
+                        "Cereals - Excluding Beer",
+                        "Fruits - Excluding Wine",
+                        "Vegetables"]
+                        
             print(f"Plotting {area}")
             colours = lib.dat.colours.vegetal_prods
             print(data)
@@ -102,5 +114,3 @@ def main(continent, region, area, path):
             plt.legend(custom_lines, list)
             plt.show()
     #plot()
-
-    io.save(f"{path}\\yield_production", f"yield_projection_{area}", output_data)

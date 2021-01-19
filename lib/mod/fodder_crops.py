@@ -98,7 +98,6 @@ def main(area_index):
                         fodder_production_ratios.loc[area].loc[item] = 0
 
                 # calculate fodder mix
-
                 FBS_feed = FBS_area.xs("Feed", level = "Element")
 
                 drop_list =     ["Sugar Crops", "Sugar, non-centrifugal", "Sugar (Raw Equivalent)",
@@ -128,20 +127,6 @@ def main(area_index):
                 for item in [x for x in fodder_demand_projected.index if x != "Fish, Seafood"]:
                     fodder_demand_projected_sum.loc[item] = np.nansum([fodder_demand_projected_sum.loc[item], fodder_demand_projected.loc[item].values], axis = 0)
 
-                # def plot():
-                #     if area == "UNITEDSTATESOFAMERICA":
-                #         fodder_mix.T.plot.area()
-                #         plt.show()
-                #         fodder_mix_projected.T.plot.area()
-                #         plt.show()
-
-    # def plot():
-    #     """ production """
-    #     item = "Sugar beet"
-    #     plot = fodder_production_ratios[fodder_production_ratios[item] > 0][item]
-    #     plot.sort_values(ascending = False).T.plot.bar()
-    #     plt.show()
-
     for col in fodder_production_ratios:
         fodder_production_ratios[col] = fodder_production_ratios[col] / np.sum(fodder_production_ratios[col])
 
@@ -157,6 +142,3 @@ def main(area_index):
                 fodder_production_allocation = (fodder_demand_projected_sum.T * fodder_production_ratios.loc[area]).T
 
                 io.save(path, f"livestock\\fodder_production_quota_{area}", fodder_production_allocation)
-    # distribute available residues by demand_ratios
-    # calculate remaining fodder demand (sum energy)
-    # allocate fodder production by current ratio (not sure where data is)

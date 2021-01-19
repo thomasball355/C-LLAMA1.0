@@ -41,7 +41,6 @@ import lib.dat.food_commodity_seperation as fcs
 
 # sort the population data from the IIASA data into a more usable format for
 # the model
-
 def population_sort():
 
     dat = pd.read_excel("data\\iamc_db_SSP2.xlsx", index_col = [0, 1, 2, 3, 4, 24])
@@ -51,7 +50,6 @@ def population_sort():
 
     area_code_index = pd.read_excel("data\\ISO3166-1_codes_and_country_names.xlsx", index_col = 1)
     area_code_index_new = pd.DataFrame(index = io.format_upper(area_code_index.index.to_list()), columns = area_code_index.columns.to_list())
-
 
     for i in range(0, len(area_code_index_new)):
         area_code_index_new.iloc[i] = area_code_index.iloc[i]
@@ -67,8 +65,7 @@ def population_sort():
         else:
             pass
 
-
-    # lots of annoying differences in naming. eg-UK is UK + NI in the naming from IIASA
+    # lots of differences in naming. eg-UK is UK + NI in the naming from IIASA
     for col in pop_dat_out:
 
         pop_dat_out[col].loc["UNITEDKINGDOM"]                       = dat.xs("GBR", level = "Region")[col].values[0]
@@ -76,8 +73,6 @@ def population_sort():
         pop_dat_out[col].loc["YUGOSLAVSFR"]                         = dat.xs("MKD", level = "Region")[col].values[0]
         # Micronesian islands
         pop_dat_out[col].loc["KIRIBATI"]                            = dat.xs("FSM", level = "Region")[col].values[0]
-        # Taiwan
-        #pop_dat_out[col].loc["CHINA,TAIWANPROVINCEOF"]  = dat.xs("TWN", level = "Region")[col].values[0]
         # China
         pop_dat_out[col].loc["CHINA,MAINLAND"]                      = dat.xs("CHN", level = "Region")[col].values[0]
         # Czech Republic
@@ -157,10 +152,6 @@ def generate_area_index():
             io.save(f"data\\{continent}\\{region}", f"_yield_max_vals_temp", max_vals_frame)
             io.save(f"data\\{continent}\\{region}", f"_yield_min_vals_temp", max_vals_frame)
             io.save(f"data\\{continent}\\{region}", f"_prod_ratios_temp", max_vals_frame)
-            # Used for sums of food_waste_energy
-    #         io.save(f"data\\{continent}\\{region}", f"_waste_energy_sums_regional_temp", waste_energy_frame)
-    #     io.save(f"data\\{continent}", f"_waste_energy_sums_continent_temp", waste_energy_frame)
-    # io.save(f"data", f"_waste_energy_sums_global_temp", waste_energy_frame)
 
     area_index_prelim = pd.DataFrame(index = country_index, columns = ["Region", "Continent", "Path"])
     area_index_prelim["Region"]    = region_index

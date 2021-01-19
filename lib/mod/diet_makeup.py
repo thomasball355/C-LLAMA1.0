@@ -84,7 +84,6 @@ def main(data, continent, region, area, path):
             population_sum = np.sum(population, axis = 0)
             pop_weight = population/population_sum
 
-
             # Vegetal products
             def veggies(data, continent, region, area):
 
@@ -106,7 +105,6 @@ def main(data, continent, region, area, path):
                 # remove key crop groups so they don't get included in the aggregated groups
                 mask = np.logical_not(data.index.get_level_values("Item").isin(staple_crops + ["Sugar cane", "Sugar beet"]))
                 data = data[mask]
-
 
                 # aggregated crop groups
                 for group in vegetal_prods_grouped_list:
@@ -130,7 +128,6 @@ def main(data, continent, region, area, path):
                 mask = np.logical_not(data.index.get_level_values("Item").isin(vegetal_prods_grouped_list))
                 data = data[mask]
 
-
                 # Aggregate Luxuries
                 luxuries_sum = pd.DataFrame(index = luxuries, columns = data.columns.to_list())
                 for food in luxuries:
@@ -152,7 +149,6 @@ def main(data, continent, region, area, path):
                 mask = np.logical_not(data.index.get_level_values("Item").isin(luxuries))
                 data = data[mask]
 
-
                 alcohol_sum = pd.DataFrame(index = alcohol, columns = data.columns.to_list())
                 for drink in alcohol:
                     try:
@@ -173,7 +169,6 @@ def main(data, continent, region, area, path):
                 vegetal.loc["Alcohol"] = np.sum(alcohol_sum, axis = 0)
                 mask = np.logical_not(data.index.get_level_values("Item").isin(alcohol))
                 data = data[mask]
-
 
                 # Remaining food in vegetal is "Other"
                 misc_running_sum = pd.DataFrame(index = data.index.get_level_values("Item"), columns = data.columns.to_list())
@@ -330,49 +325,6 @@ def main(data, continent, region, area, path):
             vegetal_ratio_projection = vegetal_ratio_projection.astype("float64")
             animal_ratio_projection = animal_ratio_projection.astype("float64")
 
-
-            # FINISH THIS (not yet)
-            # def plot():
-            #     #matplotlib is stupid >:(
-            #     def matplotlibisstupid(data):
-            #         plotted = pd.DataFrame(columns = data.columns.to_list())
-            #         plotdat = []
-            #         for row in data.index:
-            #             if np.nansum(data.loc[row]) != 0:
-            #                 plotted = plotted.append(data.loc[row])
-            #             else:
-            #                 print(f"Check: {row} missing or zero in {area} data")
-            #         return plotted
-            #
-            #
-            #     def plots(data, colour_set):
-            #         plot_dat = matplotlibisstupid(data)
-            #         cols = []
-            #         for item in plot_dat.index.to_list():
-            #             cols.append(colour_set[item])
-            #
-            #         print(plot_dat)
-            #         plt.stackplot(  #np.arange(2013, 2051, 1),
-            #                         plot_dat)#,)
-            #                         # colors = cols,
-            #                         # labels = plot_dat.index.to_list(),
-            #                         # alpha = 0.8)
-            #         plt.legend(loc = "upper left", fancybox = True, framealpha = 0.5)
-            #         plt.ylabel("Diet contribution ratio")
-            #         plt.xlabel("Year")
-            #         plt.xticks(np.arange(2010, 2051, 5))
-            #         plt.xlim(2013, 2050)
-            #         #plt.ylim(0, 1.1)
-            #         plt.show()
-            #     plots(vegetal_ratio_projection, lib.dat.colours.vegetal_prods)
-            #     plots(animal_ratio_projection, lib.dat.colours.animal_prods)
-            # plot()
-
-            # vegetal_ratio_projection.T.plot.area()
-            # plt.show()
-            # animal_ratio_projection.T.plot.area()
-            # plt.show()
-
             return vegetal_ratio_projection, animal_ratio_projection
 
 
@@ -474,6 +426,7 @@ def main(data, continent, region, area, path):
                         ]
 
         grand_diet.index = pd.MultiIndex.from_arrays(index_labels, names = ["Data", "Element", "Item", "Unit"])
+
         io.save(f"data\\{continent}\\{region}\\food_supply", f"FoodsupplyProjection_{area}", grand_diet)
 
         def plot_fs():

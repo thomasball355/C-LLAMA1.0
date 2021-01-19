@@ -94,3 +94,14 @@ grazing_intensity_rosegrant_2009 =   {              #2000   #2030  #2050
                                         "SSA"     : [0.062, 0.090, 0.090], # Sub-saharan Africa
                                         "Globe"   : [0.064, 0.094, 0.098]  # Global
                                         }
+
+
+fwf_FALAFEL = {
+                "Dairy"	                :0.40,
+                "Bovine Meat"	        :0.45,
+                "Eggs"	                :0.80,
+                "Poultry Meat"          :0.80,
+                "Mutton & Goat Meat"    :0.45,
+                "Pigmeat"	            :0.80,
+                "Meat, Other"           :0.45
+                }

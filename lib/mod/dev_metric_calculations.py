@@ -104,40 +104,9 @@ def main(continent, region, area, path):
             fed_without_forage.loc[item] = [val(x) for x in dev_metric]
 
         io.save(f"{path}\\livestock", f"fed_without_forage_{area}", fed_without_forage)
+
     fed_without_forage_1()
 
-
-    def fed_without_forage_2():
-
-        fed_without_forage_udev = lib.dat.livestock_params.fed_without_forage_developing
-        fed_without_forage = pd.DataFrame(index = fed_without_forage_udev, columns = waste_variables.columns)
-
-        #use the numbers from Tom's FALAFEL - global fix
-        fwf_FALAFEL = {
-                        "Dairy"	                :0.40,
-                        "Bovine Meat"	        :0.45,
-                        "Eggs"	                :0.80,
-                        "Poultry Meat"          :0.80,
-                        "Mutton & Goat Meat"    :0.45,
-                        "Pigmeat"	            :0.80,
-                        "Meat, Other"           :0.45
-                        }
-        fwf_test = {
-                        "Dairy"	                :0.01,
-                        "Bovine Meat"	        :0.01,
-                        "Eggs"	                :0.01,
-                        "Poultry Meat"          :0.01,
-                        "Mutton & Goat Meat"    :0.01,
-                        "Pigmeat"	            :0.01,
-                        "Meat, Other"           :0.01
-                        }
-
-        for item in fed_without_forage_udev:
-            fed_without_forage.loc[item] = [fwf_FALAFEL[item] for x in dev_metric]
-
-        io.save(f"{path}\\livestock", f"fed_without_forage_{area}", fed_without_forage)
-
-    #fed_without_forage_2()
 
     def plot():
         area_list = ["CHINAMAINLAND", "UNITEDSTATESOFAMERICA", "BELIZE", "BRAZIL", "NIGERIA", "CONGO"]

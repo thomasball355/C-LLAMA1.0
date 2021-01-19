@@ -53,48 +53,19 @@ def main(area_index):
     crop_properties = pd.read_excel("lib\\dat\\vegetal_product_properties.xlsx", index_col = 0)
     animal_properties = pd.read_excel("lib\\dat\\animal_product_properties.xlsx", index_col = 0)
 
-
-    def plot():
-        plotty = vegetal_commodity_production_ratios.sum(axis = 1)
-        plotty = plotty.sort_values(ascending = False)
-        print(plotty)
-        plt.bar(plotty.index.to_list()[:20], plotty.values[:20])
-        plt.show()
-        plotty = animal_commodity_production_ratios.sum(axis = 1)
-        plotty = plotty.sort_values(ascending = False)
-        print(plotty)
-        plt.bar(plotty.index.to_list()[:20], plotty.values[:20])
-        plt.show()
-        # plotty = vegetal_commodity_production_ratios["Wheat and products"]
-        # plotty = plotty.sort_values(ascending = False)
-        # plt.bar(vegetal_commodity_production_ratios.index.to_list(), plotty)
-        # plt.show()
-    #plot()
-
     for continent in area_index.Continent.unique():
         for region in area_index[area_index.Continent == continent].Region.unique():
             for area in area_index[area_index.Region == region].index.to_list():
-
                 area_multiplier_vegetal = vegetal_commodity_production_ratios.loc[area]
                 area_multiplier_animal = animal_commodity_production_ratios.loc[area]
-
                 area_production_vegetal =   (vegetal_production_required.T \
                                             * area_multiplier_vegetal).T #energy MJ/year
-
                 area_production_animal =    (animal_production_required.T \
                                             * area_multiplier_animal).T #energy MJ/year
-
                 crop_properties = crop_properties[np.logical_not(crop_properties.index.isin(["Sugar cane", "Sugar Crops"]))]
                 area_production_vegetal_mass = (area_production_vegetal.T / crop_properties["energy_density"]).T # kilograms
-
                 area_production_animal_mass = (area_production_animal.T / animal_properties["energy_density"]).T #
-
-                # delta_veg_mass = area_production_vegetal_mass.diff(axis = 1)
-                # delta_animal_mass = area_production_animal_mass.diff(axis = 1)
-                #
-                # plt.show()
                 path = f"data\\{continent}\\{region}\\production"
-
                 io.save(path, f"production_energy_for_human_vegetal_{area}", area_production_vegetal)
                 io.save(path, f"production_mass_vegetal_for_human_{area}", area_production_vegetal_mass)
                 io.save(path, f"production_energy_for_human_animal_{area}", area_production_animal)

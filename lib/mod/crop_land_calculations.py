@@ -20,7 +20,6 @@ def main(area_index):
         line_params = stat.linregress(years, dat)
         return line_params
 
-    # pre-amble global variables (probably none needed)
     land_use_dat = pd.read_csv("data\\Inputs_LandUse_E_All_Data_NOFLAG.csv",
                                 encoding = "latin-1",
                                 index_col = ["Area", 'Item Code',
@@ -49,18 +48,9 @@ def main(area_index):
                 crop_production_demand = io.load(path, f"production\\production_mass_vegetal_for_human_{area}") #kg/year
                 crop_production_demand = crop_production_demand / 1000 # tonnes/year
 
-                # if area == "UNITEDSTATESOFAMERICA":
-                #     crop_production_demand.T.plot.area()
-                #     plt.show()
-
+                crop_yield_projection = crop_yield_projection.replace(0, np.nan)
                 crop_land_area_projection = crop_production_demand / crop_yield_projection.values # ha
-
-                # if area == "UNITEDSTATESOFAMERICA":
-                #     crop_land_area_projection.T.plot.area()
-                #     plt.show()
-
                 cropland_hist = area_land_use.xs("Arable land", level = "Item")
-
 
                 # do yield projection for fodder
                 fodder_production_quota = io.load(path, f"livestock\\fodder_production_quota_{area}") # MJ / year
@@ -119,31 +109,12 @@ def main(area_index):
                 fodder_production_quota_mass = pd.DataFrame(columns = fodder_production_quota.columns, index = fodder_production_quota.index)
 
                 for crop in fodder_crops_list:
-                    #crop_conv = lib.funcs.name_alias.conv(crop)
 
                     energy_density = fodder_crops_properties.loc[crop_conv]["energy_density"] # MJ / kg
                     energy_density = energy_density * 1000 # MJ / tonne
                     fodder_production_quota_mass.loc[crop] = fodder_production_quota.loc[crop] / energy_density # tonnes / year
 
-                # print(fodder_production_quota) # MJ / year
-                # print(fodder_yield) # tonnes / ha / year
-                # print(fodder_production_quota_mass) # tonnes / year
-
                 fodder_land_area_projection = fodder_production_quota_mass / fodder_yield # ha
-
-                # print(fodder_land_area_projection) # ha
-                # plt.stackplot(np.arange(2013, 2051, 1), [crop_land_area_projection.sum(axis = 0).values, fodder_land_area_projection.sum(axis = 0).values], labels = ["Non-fodder", "Fodder"])
-
-                # plt.plot(np.arange(1961, 2019, 1), (cropland_hist * 1000).values[0])
-                # # plt.plot(np.arange(2013, 2051, 1), np.sum(crop_land_area_projection, axis = 0))
-                # plt.legend()
-                # plt.show()
-
-                # plt.plot(np.arange(2013, 2051, 1), np.sum(crop_production_demand))
-                # plt.show()
-                #
-                # plt.plot(crop_yield_projection.T)
-                # plt.show()
 
                 io.save(f"{path}\\land_use", f"fodder_area_{area}", fodder_land_area_projection)
                 io.save(f"{path}\\land_use", f"crop_area_{area}", crop_land_area_projection)

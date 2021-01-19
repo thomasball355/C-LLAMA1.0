@@ -18,14 +18,14 @@ non_dairy_animal_change = 0.0
 
 # Used
 waste_start_params =     {
-                    "post_prod_high_dev"      :   0.28,
+                    "post_prod_high_dev"      :   0.25,
                     "post_prod_low_dev"       :   0.07,
-                    "processing_high_dev"     :   0.10,
-                    "processing_low_dev"      :   0.20,
-                    "distribution_high_dev"   :   0.15,
-                    "distribution_low_dev"    :   0.40,
+                    "processing_high_dev"     :   0.06,
+                    "processing_low_dev"      :   0.10,
+                    "distribution_high_dev"   :   0.05,
+                    "distribution_low_dev"    :   0.50,
                     "post_prod_to_feed_low_dev"     : 0.40,
-                    "post_prod_to_feed_high_dev"    : 0.15
+                    "post_prod_to_feed_high_dev"    : 0.05
                     }
 
 land_use_data_out_path = "..\\land_use_out"

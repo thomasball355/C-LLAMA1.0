@@ -69,15 +69,5 @@ def main(continent, region, area, path):
         io.save(f"{path}\\food_supply", f"production_energy_for_human_{area}", production_energy_for_human)
         io.save(f"{path}\\food_waste", f"vegetal_waste_energy_produced_{area}", waste_energy_produced_vegetal)
 
-        # WES_reg     = io.load(f"data\\{continent}\\{region}", f"_waste_energy_sums_regional_temp")
-        # WES_cont    = io.load(f"data\\{continent}", f"_waste_energy_sums_continent_temp")
-        # WES_global  = io.load(f"data", f"_waste_energy_sums_global_temp")
-        # WES_reg    = WES_reg + waste_energy_produced_vegetal
-        # WES_cont   = WES_cont + waste_energy_produced_vegetal
-        # WES_global  = WES_global + waste_energy_produced_vegetal
-        # io.save(f"data\\{continent}\\{region}", f"_waste_energy_sums_regional_temp", WES_reg)
-        # io.save(f"data\\{continent}", f"_waste_energy_sums_continent_temp", WES_cont)
-        # io.save(f"data", f"_waste_energy_sums_global_temp", WES_global)
-
     except KeyError:
         print(f"No calculations made for {area}: re-address.")
