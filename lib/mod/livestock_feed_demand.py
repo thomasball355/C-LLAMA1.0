@@ -19,18 +19,10 @@ def main(continent, region, area, path):
     conversion_efficiency = lib.dat.livestock_params.conversion_efficiency
     byproduct_feed_potential = lib.dat.livestock_params.byproduct_feed_potential
 
-
     fed_without_forage_ratio= io.load(path, f"livestock\\fed_without_forage_{area}") # correct - production level
-
-    #food_energy_for_human = io.load(path, f"food_supply\\production_energy_for_human_{area}") # INCORRECT - should be production energy not food supply energy
-
+    # processing occurs in country - as does distribution
     waste_energy_available_area = io.load(path, f"food_waste\\vegetal_waste_energy_produced_{area}")
-    # INCORRECT - should be waste from production (see other module)
-    # actually this may be correct - processing occurs in country - as does distribution
-
-    #food_energy_for_human_animal = food_energy_for_human.xs("Animal Products", level="Group")
     food_energy_for_human_animal_production = io.load(path, f"production\\production_energy_for_human_animal_{area}")
-
     idx = food_energy_for_human_animal_production.index.to_list()
 
     fed_without_forage_meat_energy = pd.DataFrame(index=idx[:-2], columns=food_energy_for_human_animal_production.columns.to_list())  # MJ/year
@@ -61,7 +53,7 @@ def main(continent, region, area, path):
 
         potential = byproduct_feed_potential[item][1] * fodder_and_residues_feed_demand_energy.loc[item]
         potential = [x if x > 0 else 0 for x in potential]
-        actual = waste_energy_available_area.loc["post_production_to_feed"] * split
+        actual = waste_energy_available_area.loc["post_production_to_feed"] * split # re-visit this
         used = np.where(actual > potential, potential, actual)
         fodder_and_residues_feed_demand_energy.loc[item] = fodder_and_residues_feed_demand_energy.loc[item] - used
 

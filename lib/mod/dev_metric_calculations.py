@@ -19,18 +19,20 @@ def main(continent, region, area, path):
     dev_metric = io.load(f"{path}\\dev_metrics", f"dev_metric_{area}")
     food_waste_gen = io.load("lib\\dat\\waste_vars", "food_waste_gen")
 
-    waste_variables         = pd.DataFrame(columns = food_waste_gen.columns, index = ["processing", "distribution", "post_production", "post_production_to_feed"])
-    waste_variables_diff    = pd.DataFrame(columns = food_waste_gen.columns, index = ["processing", "distribution", "post_production", "post_production_to_feed"])
+    waste_variables         = pd.DataFrame(columns = food_waste_gen.columns, index = ["processing", "distribution", "post_production", "post_production_to_feed", "other_waste_to_feed"])
+    waste_variables_diff    = pd.DataFrame(columns = food_waste_gen.columns, index = ["processing", "distribution", "post_production", "post_production_to_feed", "other_waste_to_feed"])
 
     waste_variables_diff.loc["processing"] = abs(np.subtract(food_waste_gen.loc["processing_high_dev"], food_waste_gen.loc["processing_low_dev"]))
     waste_variables_diff.loc["distribution"] = abs(np.subtract(food_waste_gen.loc["distribution_high_dev"], food_waste_gen.loc["distribution_low_dev"]))
     waste_variables_diff.loc["post_production"] = abs(np.subtract(food_waste_gen.loc["post_prod_high_dev"], food_waste_gen.loc["post_prod_low_dev"]))
     waste_variables_diff.loc["post_production_to_feed"] = abs(np.subtract(food_waste_gen.loc["post_prod_to_feed_high_dev"], food_waste_gen.loc["post_prod_to_feed_low_dev"]))
+    waste_variables_diff.loc["other_waste_to_feed"] = abs(np.subtract(food_waste_gen.loc["other_waste_to_feed_high_dev"], food_waste_gen.loc["other_waste_to_feed_low_dev"]))
 
     waste_variables.loc["processing"]                   = food_waste_gen.loc["processing_low_dev"] - (waste_variables_diff.loc["processing"].values * dev_metric)
     waste_variables.loc["distribution"]                 = food_waste_gen.loc["distribution_low_dev"] - (waste_variables_diff.loc["distribution"].values * dev_metric)
     waste_variables.loc["post_production"]              = (waste_variables_diff.loc["post_production"].values * dev_metric) + food_waste_gen.loc["post_prod_low_dev"]
     waste_variables.loc["post_production_to_feed"]      = - (waste_variables_diff.loc["post_production_to_feed"].values * dev_metric) + food_waste_gen.loc["post_prod_to_feed_low_dev"]
+    waste_variables.loc["other_waste_to_feed"]          = (waste_variables_diff.loc["other_waste_to_feed"].values * dev_metric) + food_waste_gen.loc["other_waste_to_feed_low_dev"]
 
     conversion_ratios = pd.read_csv("data\\wirsenius_2010_FCR_livestock.csv", index_col=[
                                     "Animal system and parameter", "Scenario"])  # from https://doi.org/10.1016/j.agsy.2010.07.005

@@ -20,7 +20,8 @@ def main():
                                 index = ["post_prod_low_dev", "post_prod_high_dev",
                                         "processing_low_dev", "processing_high_dev",
                                         "distribution_low_dev", "distribution_high_dev",
-                                        "post_prod_to_feed_low_dev", "post_prod_to_feed_high_dev"])
+                                        "post_prod_to_feed_low_dev", "post_prod_to_feed_high_dev",
+                                        "other_waste_to_feed_low_dev", "other_waste_to_feed_high_dev"])
     cols = waste_ratios.columns.to_list()
     ratio = lambda x: (x - cols[0])/(cols[-1] - cols[0])
 
@@ -40,5 +41,8 @@ def main():
 
     waste_ratios.loc["post_prod_to_feed_high_dev"] = [start_params["post_prod_to_feed_high_dev"]*(1 + improvement*ratio(x)) for x in cols]
     waste_ratios.loc["post_prod_to_feed_low_dev"] = [start_params["post_prod_to_feed_low_dev"]*(1 + improvement*ratio(x)) for x in cols]
+
+    waste_ratios.loc["other_waste_to_feed_high_dev"] = [start_params["other_waste_to_feed_high_dev"]*(1 + improvement*ratio(x)) for x in cols]
+    waste_ratios.loc["other_waste_to_feed_low_dev"] = [start_params["other_waste_to_feed_low_dev"]*(1 + improvement*ratio(x)) for x in cols]
 
     io.save("lib\\dat\\waste_vars", "food_waste_gen", waste_ratios)

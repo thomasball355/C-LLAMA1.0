@@ -118,12 +118,8 @@ def main(area_index):
                 production_mass_demand_hist_non_pasture = pd.DataFrame(index = lib.dat.livestock_params.animal_prods_list +\
                                                     ["Dairy"],
                                                     columns = anim_non_dairy.columns.to_list())
-                # production_energy_hist = pd.DataFrame(index = lib.dat.livestock_params.animal_prods_list +\
-                #                                     ["Dairy"],
-                #                                     columns = anim_non_dairy.columns.to_list())
 
                 pasture_factor = lib.dat.livestock_params.pasture_factor
-
 
                 for item in lib.dat.livestock_params.animal_prods_list:
 
@@ -143,7 +139,6 @@ def main(area_index):
                                                             * conversion_ratios_format_1992.loc["Dairy"][area_dict[region]]
                 production_mass_demand_hist_sum = production_mass_demand_hist.sum(axis = 0) # 1000 tonnes / year **
 
-                ##### REMOVE CHICKENS AND PIGS FROM FEED DAT #####
                 anim_dairy = anim_dairy.iloc[:3, :]
                 anim_non_dairy = anim_non_dairy.iloc[:-1, :]
                 prod_ratio = pd.concat([anim_non_dairy, anim_dairy])
@@ -159,27 +154,6 @@ def main(area_index):
                     line_params = stat.linregress(years, dat)
                     return line_params
 
-                # line_params = line(forage_fed_hist_mass[-40:], 2013 - 39, 2013)
-                # slope = line_params[0]
-                # inter = line_params[1]
-                # r = line_params[2]
-                # p = line_params[3]
-                #
-                # if r**2 > 0.2:
-                #     val = lambda x: (x * slope) + inter
-                #     forage_fed_projected = [0 if val(x) <= 0 else val(x) if val(x) <= 1.0 else 1.0 for x in np.arange(2013, 2051, 1)]
-                # else:
-                #     forage_fed_projected = [np.mean(forage_fed_hist_mass[-10:]) for x in np.arange(2013, 2051, 1)]
-                #
-                # def plot():
-                #     area_list = ["CHINAMAINLAND", "UNITEDSTATESOFAMERICA", "BELIZE", "BRAZIL", "NIGERIA", "CONGO"]
-                #     if area in area_list:
-                #         plt.scatter(np.arange(1961, 2014, 1), forage_fed_hist_mass)
-                #         plt.plot(np.arange(2013, 2051, 1), forage_fed_projected)
-                #         plt.ylim(0, 1)
-                #         plt.show()
-                # #plot()
-
                 try:
                     perm_pasture = land_use_dat_area.xs("Land under perm. meadows and pastures", level = "Item").fillna(0)
                 except KeyError:
@@ -192,11 +166,6 @@ def main(area_index):
                     print(f"No data for \"Land under temp. meadows and pastures\" in {area}")
 
                 total_pasture = perm_pasture + temp_pasture.values # 1000 Ha
-
-                # total_pasture.T.plot()
-                # plt.show()
-                # plt.plot(pasture_fed_hist_mass)
-                # plt.show()
 
                 effective_pasture_yield_hist.loc[area] = pasture_fed_hist_mass.values / total_pasture.iloc[:, :-4].values # tonnes per hectare, 1000s cancel
 
@@ -239,7 +208,7 @@ def main(area_index):
                     pasture_mass_demand_projection.loc[item] = (pasture_energy_demand_projection.loc[item] * pasture_factor[item]) / (energy_density[item] * 1000) #tonnes/year
 
                 def method_2():
-
+                    # experimented - not used.
                     grazing_intensity_rosegrant_2009 = lib.dat.livestock_params.grazing_intensity_rosegrant_2009
                     area_dict = {"NORTHERNAMERICA": "NAE",
                                  "SOUTHAMERICA": "LAC",
@@ -272,11 +241,7 @@ def main(area_index):
 
                     return line
 
-                effective_pasture_mass_yield_projected_2 = method_2()
-
                 total_pasture_area = (np.sum(pasture_mass_demand_projection, axis = 0) / 1) / effective_pasture_mass_yield_projected # hectares
-
-                # total_pasture_area = (np.sum(pasture_mass_demand_projection, axis = 0)) / effective_pasture_mass_yield_projected_2[13:]
 
                 plot_total_pasture_area.loc[area] = total_pasture_area
 
@@ -287,24 +252,4 @@ def main(area_index):
 
                 plot_total_pasture_hist.loc[area] = total_pasture.values[0]
 
-                def plot():
-                    plt.plot(np.arange(1961, 2018, 1), total_pasture.values[0])
-                    plt.plot(plot_total_pasture_area_diff.loc[area])
-                    plt.show()
-                    # plt.plot(np.arange(1961, 2014, 1), total_pasture.iloc[:, :-4].values[0])
-                    # plt.plot(np.arange(2013, 2051, 1), total_pasture_area)
-                    # plt.show()
-                #plot()
-
                 io.save(f"{path}\\land_use", f"pasture_area_{area}", total_pasture_area)
-
-    # plot_total_pasture_area[plot_total_pasture_area.mean(axis = 1) > 0.0E+07].T.plot()
-    # plt.show()
-
-    # plot_total_pasture_area_diff[plot_total_pasture_area_diff.mean(axis = 1) > 0.0E+07].T.plot()
-    # plt.show()
-    #
-    # plt.plot(np.arange(2013, 2051, 1), np.sum(plot_total_pasture_area, axis = 0))
-    # #plt.plot(np.arange(2013, 2051, 1), np.sum(plot_total_pasture_area_diff, axis = 0))
-    # plt.plot(np.arange(1961, 2018, 1), np.sum(plot_total_pasture_hist, axis = 0))
-    # plt.show()

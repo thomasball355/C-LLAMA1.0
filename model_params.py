@@ -25,7 +25,9 @@ waste_start_params =     {
                     "distribution_high_dev"   :   0.05,
                     "distribution_low_dev"    :   0.50,
                     "post_prod_to_feed_low_dev"     : 0.40,
-                    "post_prod_to_feed_high_dev"    : 0.05
+                    "post_prod_to_feed_high_dev"    : 0.05,
+                    "other_waste_to_feed_low_dev"   : 0.15,
+                    "other_waste_to_feed_high_dev"  : 0.40
                     }
 
 land_use_data_out_path = "..\\land_use_out"

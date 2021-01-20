@@ -76,10 +76,10 @@ def main(area_index):
 
                 ######################
                 # multiply by "efficiency": ie, actually used residues based on region
-                post_prod_to_feed = io.load(f"{path}\\food_waste", f"waste_ratios_{area}").loc["post_production_to_feed"]
+                other_waste_to_feed = io.load(f"{path}\\food_waste", f"waste_ratios_{area}").loc["other_waste_to_feed"]
 
                 for item in area_feed_demand.index.to_list():
-                    feed_used = potential_feed_from_agri.loc[item] * post_prod_to_feed.values
+                    feed_used = potential_feed_from_agri.loc[item] * other_waste_to_feed.values
                     area_feed_demand.loc[item] = np.where(feed_used > area_feed_demand.loc[item], 0, area_feed_demand.loc[item] - feed_used)
 
                 # Calculate ratios for production and fodder mix (area)

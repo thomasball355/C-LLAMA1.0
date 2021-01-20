@@ -9,12 +9,16 @@ At some point in the future I will change this so stages of the model can be run
 from the command line (or even better from a GUI).
 
 All instances of a 'dev_metric' are referred to in any surrounding literature as
-'industrialisation_metric', as this is a truer reflection of the metric.
+'agricultural industrialisation parameter', as this is a truer reflection of the
+quantity.
 
 In theory, 'initialise.py' should check for installed packages and install any
-that are missing, but currently this functionality doesn't always work properly so
-required packages might need to be installed manually. Fortunately they're all
-common Python libraries.
+that are missing, but currently this functionality doesn't always work properly
+so required packages might need to be installed manually. Fortunately they're
+all common Python libraries: 'pandas', 'xlrd', 'pickle-mixin', 'scipy',
+'seaborn', 'matplotlib'. They can be install using 'python -m pip install
+{package}' in the command line or 'conda install {package}' if you're using
+Anaconda.
 """
 
 try:

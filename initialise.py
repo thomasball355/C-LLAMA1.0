@@ -120,7 +120,7 @@ def generate_area_index():
     continent_index     = []
     path_index          = []
 
-    waste_energy_frame  = pd.DataFrame(0,   index = ["post_production", "processing", "distribution", "post_production_to_feed"],
+    waste_energy_frame  = pd.DataFrame(0,   index = ["post_production", "processing", "distribution", "post_production_to_feed", "other_waste_to_feed"],
                                             columns = np.arange(2013, 2050 + 1, 1))
     max_vals_frame = pd.DataFrame(columns   = fcs.big_list)
 
