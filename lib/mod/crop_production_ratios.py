@@ -244,8 +244,8 @@ def main(area_index):
                         plt.show()
                 #plot()
 
-                vegetal_commodity_production_5.loc[area] = vegetal_production.iloc[:, :-10].mean(axis = 1)
-                animal_commodity_production_5.loc[area] = animal_production.iloc[:, :-10].mean(axis = 1)
+                vegetal_commodity_production_5.loc[area] = vegetal_production.iloc[:, :-5].mean(axis = 1)
+                animal_commodity_production_5.loc[area] = animal_production.iloc[:, :-5].mean(axis = 1)
                 pd.set_option("display.max_rows", None)
 
     for col in vegetal_commodity_production_ratios:
