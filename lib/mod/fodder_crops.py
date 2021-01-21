@@ -120,9 +120,9 @@ def main(area_index):
 
                 fodder_mix_projected = lib.funcs.perc_contributions_WRAP.fodder_percentage_contributions(fodder_mix, 2050, 1961, 2013)
 
-                fodder_demand_projected = fodder_mix_projected * np.sum(area_feed_demand, axis = 0).values
+                non_crop_2013_factor = 0.08 # calculated using FAO data externally
+                fodder_demand_projected = fodder_mix_projected * np.sum(area_feed_demand, axis = 0).values * (1 - non_crop_2013_factor)
                 io.save(path, f"livestock\\fodder_demand_projected_{area}", fodder_demand_projected)
-
 
                 for item in [x for x in fodder_demand_projected.index if x != "Fish, Seafood"]:
                     fodder_demand_projected_sum.loc[item] = np.nansum([fodder_demand_projected_sum.loc[item], fodder_demand_projected.loc[item].values], axis = 0)
