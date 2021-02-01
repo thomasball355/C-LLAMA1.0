@@ -70,4 +70,4 @@ def main(continent, region, area, path):
         io.save(f"{path}\\food_waste", f"vegetal_waste_energy_produced_{area}", waste_energy_produced_vegetal)
 
     except KeyError:
-        print(f"No calculations made for {area}: re-address.")
+        pass

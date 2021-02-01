@@ -19,8 +19,7 @@ def main(continent, region, area, path):
     conversion_efficiency = lib.dat.livestock_params.conversion_efficiency
     byproduct_feed_potential = lib.dat.livestock_params.byproduct_feed_potential
 
-    fed_without_forage_ratio= io.load(path, f"livestock\\fed_without_forage_{area}") # correct - production level
-    # processing occurs in country - as does distribution
+    fed_without_forage_ratio= io.load(path, f"livestock\\fed_without_forage_{area}") 
     waste_energy_available_area = io.load(path, f"food_waste\\vegetal_waste_energy_produced_{area}")
     food_energy_for_human_animal_production = io.load(path, f"production\\production_energy_for_human_animal_{area}")
     idx = food_energy_for_human_animal_production.index.to_list()

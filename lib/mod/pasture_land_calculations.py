@@ -242,14 +242,11 @@ def main(area_index):
                     return line
 
                 total_pasture_area = (np.sum(pasture_mass_demand_projection, axis = 0) / 1) / effective_pasture_mass_yield_projected # hectares
-
                 plot_total_pasture_area.loc[area] = total_pasture_area
-
                 delta_area = total_pasture_area - total_pasture_area.values[0]
-
                 val = lambda x: x + total_pasture.values[0][-4]
                 plot_total_pasture_area_diff.loc[area] = [0 if val(x) < 0 else val(x) for x in delta_area]
-
                 plot_total_pasture_hist.loc[area] = total_pasture.values[0]
+
 
                 io.save(f"{path}\\land_use", f"pasture_area_{area}", total_pasture_area)

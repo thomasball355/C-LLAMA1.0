@@ -74,28 +74,27 @@ def data_produce(continent, area):
         data = metadata.loc[metadata["Country Group"] == region]
         return data
 
-    # splits region into subregions to check if any countries are "left out"
-    # eg. split Africa into Northern, Southern, Eastern, Western, Central. This leaves Zanzibar out ( :c )
-    def regionfinder(area, *args):
-        region_list = region(FAO_country_metadata, area)["Country"].to_list()
-        rejectlist = []
-        for country in region_list:
-            accounted = False
-            count = 0
-            for arg in args:
-                if country in region(FAO_country_metadata, arg)["Country"].to_list():
-                    count += 1
-                    accounted = True
-            if count > 1:
-                print(country)
-            if accounted == False:
-                rejectlist.append(country)
-        print(rejectlist)
+    # # splits region into subregions to check if any countries are "left out"
+    # # eg. split Africa into Northern, Southern, Eastern, Western, Central. This leaves Zanzibar out ( :c )
+    # def regionfinder(area, *args):
+    #     region_list = region(FAO_country_metadata, area)["Country"].to_list()
+    #     rejectlist = []
+    #     for country in region_list:
+    #         accounted = False
+    #         count = 0
+    #         for arg in args:
+    #             if country in region(FAO_country_metadata, arg)["Country"].to_list():
+    #                 count += 1
+    #                 accounted = True
+    #         if count > 1:
+    #             print(country)
+    #         if accounted == False:
+    #             rejectlist.append(country)
+    #     print(rejectlist)
 
     # takes continent level data 'dataset' based on previously determined groups 'groups' and
     # splits each region into subregions and saves as .obj and .csv
     def data_make(dataset, groups):
-
 
         #["Area Code","Area","Item Code","Item","Element Code","Element","Unit"]
         try:
@@ -104,7 +103,7 @@ def data_produce(continent, area):
             try:
                 data_in = pd.read_csv(f"{wd}\\{dataset}\\FoodBalanceSheets_E_{dataset}_1.csv",encoding = "latin-1", index_col = ["Area","Item","Element","Unit", "Area Code", "Item Code", "Element Code"])
             except FileNotFoundError:
-                print(f"FoodBalanceSheets_E_{dataset}_1.csv not found in /data or /data/{dataset}, stopping...")
+                print(f"FoodBalanceSheets_E_{dataset}_1.csv not found in /data or /data/{dataset}")
 
         # drop flags (for now, might need these later)
         data_in = data_in.drop(data_in.filter(regex = "Y....F").columns, axis = 1)
@@ -113,12 +112,13 @@ def data_produce(continent, area):
             g = group.replace(" ", "").replace("/", "").replace("(", "").replace(")", "").replace("-", "").upper()
             dirs(f"{wd}\\{dataset}", f"{g}")
             country_list = region(FAO_country_metadata, group)["Country"]
-            data_out = data_in.iloc[data_in.index.get_level_values("Area").isin(country_list)]
 
+            data_out = data_in.iloc[data_in.index.get_level_values("Area").isin(country_list)]
             data_out = io.re_index_area(data_out)
 
             output_data(data_out, f"{wd}\\{dataset}\\{g}\\FoodBalanceSheets_E_{g}", "pd_csv", g)
             output_data(data_out, f"{wd}\\{dataset}\\{g}\\FoodBalanceSheets_E_{g}", "pickle", g)
+
     data_make(continent, area)
 
 # split crop production

@@ -82,6 +82,8 @@ def main(area_index):
                 modifier = 1.0
 
             item_list = [x for x in comm_group(FAO_comm_groups, group)["Item"] if x not in staple_crops]
+            if group == "Sugar & Sweeteners":
+                item_list = item_list + ["Sugar cane", "Sugar beet"]
             group_dat = data.iloc[data.index.get_level_values("Item").isin(item_list)]
             vegetal.loc[group] = np.sum(group_dat, axis = 0) * modifier
             # remove grouped items
@@ -90,7 +92,6 @@ def main(area_index):
         # remove aggregated groups to leave the "stragglers" (luxuries and misc)
         mask = np.logical_not(data.index.get_level_values("Item").isin(vegetal_prods_grouped_list))
         data = data[mask]
-
 
         # Aggregate Luxuries
         luxuries_sum = pd.DataFrame(index = luxuries, columns = data.columns.to_list())

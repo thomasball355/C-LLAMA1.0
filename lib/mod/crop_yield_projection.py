@@ -80,7 +80,7 @@ def main(continent, region, area, path):
                         "Cereals - Excluding Beer",
                         "Fruits - Excluding Wine",
                         "Vegetables"]
-                        
+
             print(f"Plotting {area}")
             colours = lib.dat.colours.vegetal_prods
             print(data)

@@ -103,7 +103,7 @@ def main(data, continent, region, area, path):
                         error_rep(crop)
 
                 # remove key crop groups so they don't get included in the aggregated groups
-                mask = np.logical_not(data.index.get_level_values("Item").isin(staple_crops + ["Sugar cane", "Sugar beet"]))
+                mask = np.logical_not(data.index.get_level_values("Item").isin(staple_crops))
                 data = data[mask]
 
                 # aggregated crop groups

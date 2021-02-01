@@ -134,14 +134,12 @@ def generate_area_index():
             string1 = f"data\\{continent}\\{region}\\FoodBalanceSheets_E_{region}.obj"
             string2 = f"data\\{continent}\\{region}\\Production_Crops_E_{region}.obj"
 
-            if os.path.isfile(string1) == False:
-                data_sort.data_produce(continent, continents[continent])
-            if os.path.isfile(string2) == False:
-                data_sort.crop_production_data(continent, region)
+            data_sort.data_produce(continent, continents[continent])
+            data_sort.crop_production_data(continent, region)
 
             data = io.load(f"data\\{continent}\\{region}", f"FoodBalanceSheets_E_{region}")
 
-            for area in data.xs("Population", level = "Item").index.get_level_values("Area").to_list():
+            for area in data.index.get_level_values("Area").unique().to_list():
                 area = io.format_upper(area)
                 country_index.append(area)
                 region_index.append(region)
@@ -152,6 +150,7 @@ def generate_area_index():
             io.save(f"data\\{continent}\\{region}", f"_yield_max_vals_temp", max_vals_frame)
             io.save(f"data\\{continent}\\{region}", f"_yield_min_vals_temp", max_vals_frame)
             io.save(f"data\\{continent}\\{region}", f"_prod_ratios_temp", max_vals_frame)
+
 
     area_index_prelim = pd.DataFrame(index = country_index, columns = ["Region", "Continent", "Path"])
     area_index_prelim["Region"]    = region_index
@@ -197,7 +196,7 @@ def generate_area_index():
                                   index_col=[0,1,2,3,4,5,6])
         production = pd.concat([prod_africa,
                                prod_americas,
-                               prod_americas,
+                               prod_asia,
                                prod_europe,
                                prod_oceania])
         production = production.xs("Production", level = "Element")
@@ -207,7 +206,7 @@ def generate_area_index():
         p2017 = production_sum["Y2017"].sort_values(ascending = False)
         p2017 = p2017[p2017 > 0]
         perc, k = 0, 0
-        while perc < 99.7:
+        while perc < 99.9997:
             perc = np.sum(p2017[:k]) / np.sum(p2017[:]) * 100
             k += 1
 

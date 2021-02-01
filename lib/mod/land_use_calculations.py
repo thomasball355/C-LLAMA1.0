@@ -52,7 +52,8 @@ def main(area_index):
     area_labels_g = []
     item_labels_g = []
     unit_labels_g = []
-
+    crop_not = []
+    past_not =[]
     for continent in area_index.Continent.unique():
 
         for region in area_index[area_index.Continent == continent].Region.unique():
@@ -139,6 +140,7 @@ def main(area_index):
                                         "Cropland", level = "Item").values[0]
                 except KeyError:
                     pass
+                    crop_not.append(area)
                 try:
                     pasture_hist = land_use_dat_area.xs(
                         "Land under perm. meadows and pastures", level = "Item")
@@ -146,7 +148,7 @@ def main(area_index):
                 except KeyError:
                     pasture_hist = land_use_dat_area.xs(
                                             "Country area", level = "Item") * 0
-
+                    past_not.append(area)
                 # try:
                 #     pasture_hist_temp = land_use_dat_area.xs("Land under temp. meadows and pastures", level = "Item").values[0]
                 #     global_land_use_hist.loc["Pasture"] += pasture_hist_temp
@@ -155,10 +157,11 @@ def main(area_index):
 
                 pasture_hist = pasture_hist * 1000
 
+
                 pasture_land_projection_adjusted = pasture_land_projection\
                                                 + (pasture_hist.values[0][-1]\
                                                 - pasture_land_projection.iloc[5])
-                pasture_land_projection_adjusted = [pasture_hist.values[0][-6 + i]\
+                pasture_land_projection_adjusted = [pasture_hist.values[0][-5 + i]\
                                                     if i < 5 else\
                                                     pasture_land_projection_adjusted.iloc[i]\
                                                     for i in np.arange(0, 2051 - 2013, 1)]
@@ -223,6 +226,7 @@ def main(area_index):
         plt.legend()
         plt.show()
 
+
     index_labels = [cont_labels,
                     region_labels,
                     area_labels,
@@ -239,7 +243,7 @@ def main(area_index):
     out_path = model_params.land_use_data_out_path
     out_name = model_params.land_use_data_out_name
 
-    global_output_dat.to_csv(f"{out_path}\\pyFALAFEL_WRAP_land_use_out_{out_name}.csv")
+    global_output_dat.to_csv(f"{out_path}\\land_use_{out_name}.csv")
 
     index_labels = [cont_labels_g,
                     region_labels_g,
@@ -254,4 +258,9 @@ def main(area_index):
 
     global_output_dat_grouped.index = idx
 
-    global_output_dat_grouped.to_csv(f"{out_path}\\pyFALAFEL_WRAP_land_use_out_grouped_{out_name}.csv")
+    global_output_dat_grouped.to_csv(f"{out_path}\\land_use_grouped_{out_name}.csv")
+
+    # l1 = land_use_dat.index.get_level_values("Area").unique().to_list()
+    # l2 = area_index.index.to_list()
+    #
+    # print(l3)

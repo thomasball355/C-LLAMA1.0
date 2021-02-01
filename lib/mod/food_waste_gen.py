@@ -25,11 +25,6 @@ def main():
     cols = waste_ratios.columns.to_list()
     ratio = lambda x: (x - cols[0])/(cols[-1] - cols[0])
 
-    # if efficiency == "no_change":
-    #     for item in waste_ratios.index.to_list():
-    #         waste_ratios.loc[item] = [start_params[item] for x in cols]
-    #
-    # else:
     improvement = model_params.efficiency_improvement
 
     waste_ratios.loc["post_prod_high_dev"] = [start_params["post_prod_high_dev"]*(1 - improvement*ratio(x)) for x in cols]
