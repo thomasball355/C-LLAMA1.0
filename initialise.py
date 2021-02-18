@@ -158,15 +158,15 @@ def generate_area_index():
     def land_drop():
         land_use_dat = pd.read_csv("data\\Inputs_LandUse_E_All_Data_NOFLAG.csv",
         encoding = "latin-1",
-        index_col = ["Area", 'Item Code',
-        'Item', 'Element Code', 'Element', 'Unit'])
-        land_use_dat = io.re_index_area(land_use_dat)
-        land_area = land_use_dat.xs("Land area", level = "Item")
-        cutoff_VANUATU = 1219
-        land_area_keep = land_area[land_area.mean(axis = 1) > cutoff_VANUATU]
+        index_col = [0,1,2,3,4,5,6])
+        mask = land_use_dat.index.get_level_values("Area Code").isin(np.arange(0,4999,1))
+        land_use_dat = land_use_dat[mask]
+        land_area = land_use_dat.xs("Agricultural land", level = "Item")
+        cutoff = 34
+        land_area_keep = land_area[land_area.mean(axis = 1) > cutoff]
         return land_area_keep.index.get_level_values("Area").to_list()
 
-    # keep_list = land_drop()
+    land_keep_list = io.format_upper(land_drop())
 
     def prod_drop():
         prod_africa = pd.read_csv("data\\Production_Crops_E_Africa_NOFLAG.csv",
@@ -201,36 +201,11 @@ def generate_area_index():
             k += 1
         return p2017[:k].index.to_list()
 
-    # keep_list = prod_drop()
-    # keep_list = io.format_upper(keep_list)
-    #
-    # area_index_prelim = area_index_prelim[area_index_prelim.index.isin(keep_list)]
+    prod_keep_list = io.format_upper(prod_drop())
+    keep_list = prod_keep_list + land_keep_list
 
-    # # drop based on production and land area
-    # # (calculated in a seperate script for now)
-    drop_list = ['Saint Lucia',
-                 'Micronesia (Federated States of)',
-                 'Guam',
-                 'Antigua and Barbuda',
-                 'Marshall Islands',
-                 'American Samoa',
-                 'Wallis and Futuna Islands',
-                 'Saint Kitts and Nevis',
-                 'Bermuda',
-                 'Seychelles',
-                 'Niue',
-                 'Cook Islands',
-                 'Tokelau',
-                 'Montserrat',
-                 'Nauru',
-                 'Tuvalu',
-                 'Faroe Islands',
-                 'British Virgin Islands',
-                 'Cayman Islands',
-                 'Liechtenstein',
-                 'Saint Pierre and Miquelon']
-    drop_list = io.format_upper(drop_list)
-    area_index_prelim = area_index_prelim[np.logical_not(area_index_prelim.index.isin(drop_list))]
+    area_index_prelim = area_index_prelim[area_index_prelim.index.isin(keep_list)]
+
     dev_met_temp = pd.DataFrame(index = area_index_prelim.index.to_list(), columns = np.arange(1961, 2014, 1))
 
     io.save("lib\\dat", f"dev_met_hist", dev_met_temp)
