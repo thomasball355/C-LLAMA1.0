@@ -133,12 +133,9 @@ def generate_area_index():
             region = io.format_upper(region)
             string1 = f"data\\{continent}\\{region}\\FoodBalanceSheets_E_{region}.obj"
             string2 = f"data\\{continent}\\{region}\\Production_Crops_E_{region}.obj"
-
             data_sort.data_produce(continent, continents[continent])
             data_sort.crop_production_data(continent, region)
-
             data = io.load(f"data\\{continent}\\{region}", f"FoodBalanceSheets_E_{region}")
-
             for area in data.index.get_level_values("Area").unique().to_list():
                 area = io.format_upper(area)
                 country_index.append(area)
@@ -150,13 +147,10 @@ def generate_area_index():
             io.save(f"data\\{continent}\\{region}", f"_yield_max_vals_temp", max_vals_frame)
             io.save(f"data\\{continent}\\{region}", f"_yield_min_vals_temp", max_vals_frame)
             io.save(f"data\\{continent}\\{region}", f"_prod_ratios_temp", max_vals_frame)
-
-
     area_index_prelim = pd.DataFrame(index = country_index, columns = ["Region", "Continent", "Path"])
     area_index_prelim["Region"]    = region_index
     area_index_prelim["Continent"] = continent_index
     area_index_prelim["Path"]      = path_index
-
     null_list = ["ETHIOPIAPDR", "SUDANFORMER", "USSR", "SERBIAANDMONTENEGRO"]
     area_index_prelim = area_index_prelim[np.logical_not(area_index_prelim.index.isin(null_list))]
 
@@ -167,13 +161,9 @@ def generate_area_index():
         index_col = ["Area", 'Item Code',
         'Item', 'Element Code', 'Element', 'Unit'])
         land_use_dat = io.re_index_area(land_use_dat)
-
         land_area = land_use_dat.xs("Land area", level = "Item")
-
         cutoff_VANUATU = 1219
-
         land_area_keep = land_area[land_area.mean(axis = 1) > cutoff_VANUATU]
-
         return land_area_keep.index.get_level_values("Area").to_list()
 
     # keep_list = land_drop()
@@ -209,14 +199,38 @@ def generate_area_index():
         while perc < 99.9997:
             perc = np.sum(p2017[:k]) / np.sum(p2017[:]) * 100
             k += 1
-
         return p2017[:k].index.to_list()
 
-    keep_list = prod_drop()
-    keep_list = io.format_upper(keep_list)
+    # keep_list = prod_drop()
+    # keep_list = io.format_upper(keep_list)
+    #
+    # area_index_prelim = area_index_prelim[area_index_prelim.index.isin(keep_list)]
 
-    area_index_prelim = area_index_prelim[area_index_prelim.index.isin(keep_list)]
-
+    # # drop based on production and land area
+    # # (calculated in a seperate script for now)
+    drop_list = ['Saint Lucia',
+                 'Micronesia (Federated States of)',
+                 'Guam',
+                 'Antigua and Barbuda',
+                 'Marshall Islands',
+                 'American Samoa',
+                 'Wallis and Futuna Islands',
+                 'Saint Kitts and Nevis',
+                 'Bermuda',
+                 'Seychelles',
+                 'Niue',
+                 'Cook Islands',
+                 'Tokelau',
+                 'Montserrat',
+                 'Nauru',
+                 'Tuvalu',
+                 'Faroe Islands',
+                 'British Virgin Islands',
+                 'Cayman Islands',
+                 'Liechtenstein',
+                 'Saint Pierre and Miquelon']
+    drop_list = io.format_upper(drop_list)
+    area_index_prelim = area_index_prelim[np.logical_not(area_index_prelim.index.isin(drop_list))]
     dev_met_temp = pd.DataFrame(index = area_index_prelim.index.to_list(), columns = np.arange(1961, 2014, 1))
 
     io.save("lib\\dat", f"dev_met_hist", dev_met_temp)

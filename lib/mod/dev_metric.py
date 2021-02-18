@@ -37,7 +37,7 @@ def main(data, continent, region, area, path):
     p           = line_vars[3]
 
     lin = lambda x: x * slope + intercept
-    hist_mean = np.mean(dev_metric_hist[-10:])
+    hist_mean = np.mean(dev_metric_hist[-5:])
 
     def linear_interpolate():
         val_2050 = lin(2050)
@@ -51,6 +51,7 @@ def main(data, continent, region, area, path):
                 dev_metric_proj = [0.0 if hist_mean <= 0.0 else hist_mean if hist_mean <= 1.0 else 1.0 for x in range(2013, 2051)]
         else:
             dev_metric_proj = [0.0 if hist_mean <= 0.0 else hist_mean if hist_mean <= 1.0 else 1.0 for x in range(2013, 2051)]
+
         return dev_metric_proj
 
     dev_metric_proj = linear_interpolate()

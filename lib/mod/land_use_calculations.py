@@ -27,10 +27,10 @@ def main(area_index):
     fodder_list_red = [x for x in fodder_list if x not in crop_list] + ["Other feed"]
 
     global_land_use_proj = pd.DataFrame(
-                                index = ["Fodder Crops", "Cropland", "Pasture"],
+                                index = ["Fodder Crops", "Food Crops", "Pasture"],
                                 columns = np.arange(2013, 2051, 1), data = 0)
     global_land_use_proj_adjusted = pd.DataFrame(
-                                index = ["Pasture", "Fodder Crops", "Cropland"],
+                                index = ["Pasture", "Fodder Crops", "Food Crops"],
                                 columns = np.arange(2013, 2051, 1), data = 0)
     global_land_use_proj_adjusted_disagg = pd.DataFrame(
                                 index = crop_list + fodder_list_red + ["Pasture"],
@@ -63,10 +63,10 @@ def main(area_index):
             for area in area_index[area_index.Region == region].index.to_list():
 
                 area_land_use_proj = pd.DataFrame(
-                                index = ["Cropland", "Pasture", "Fodder Crops"],
+                                index = ["Food Crops", "Pasture", "Fodder Crops"],
                                 columns = np.arange(2013, 2051, 1))
                 area_land_use_proj_adjusted = pd.DataFrame(
-                                index = ["Cropland", "Pasture", "Fodder Crops"],
+                                index = ["Food Crops", "Pasture", "Fodder Crops"],
                                 columns = np.arange(2013, 2051, 1))
                 area_land_use_proj_adjusted_disagg = pd.DataFrame(
                                 index = crop_list + fodder_list_red + ["Pasture"],
@@ -86,32 +86,61 @@ def main(area_index):
 
                 area_land_use_proj.loc["Pasture"] = pasture_land_projection
                 global_land_use_proj.loc["Pasture"] += pasture_land_projection
-
                 area_land_use_proj.loc["Fodder Crops"] = np.sum(fodder_land_projection,
                                                                         axis = 0)
                 global_land_use_proj.loc["Fodder Crops"] += np.sum(fodder_land_projection,
                                                                 axis = 0).values
+                area_land_use_proj.loc["Food Crops"] = np.sum(crop_land_projection,
+                                                                axis = 0).values
+                global_land_use_proj.loc["Food Crops"] += np.sum(crop_land_projection,
+                                                                axis = 0).values
+
+                adjust = True
+                if adjust == True:
+                    crop_hist = land_use_dat_area.xs("Cropland", level = "Item") * 1000
+                    crop_recent_val = crop_hist.values[0][-1]
+                    try:
+                        food_ratio = area_land_use_proj[2017].loc["Food Crops"] /\
+                                    (area_land_use_proj[2017].loc["Food Crops"] +\
+                                    area_land_use_proj[2017].loc["Fodder Crops"])
+                    except ZeroDivisionError:
+                        food_ratio = 0.7
+                    fodder_ratio = 1 - food_ratio
+                    delta = crop_recent_val - (area_land_use_proj.loc["Food Crops"][2017]\
+                                            + area_land_use_proj.loc["Fodder Crops"][2017])
+                    food_delta = delta * food_ratio
+                    fodder_delta = delta * fodder_ratio
+                else:
+                    food_delta = 0
+                    fodder_delta = 0
+
+
                 area_land_use_proj_adjusted.loc["Fodder Crops"] = np.sum(fodder_land_projection,
-                                                                        axis = 0)
+                                                                        axis = 0).values + fodder_delta
                 global_land_use_proj_adjusted.loc["Fodder Crops"] += np.sum(fodder_land_projection,
-                                                                axis = 0).values
-
-                area_land_use_proj.loc["Cropland"] = np.sum(crop_land_projection,
-                                                                axis = 0).values
-                area_land_use_proj_adjusted.loc["Cropland"] = np.sum(crop_land_projection,
-                                                                axis = 0).values
-                global_land_use_proj.loc["Cropland"] += np.sum(crop_land_projection,
-                                                                axis = 0).values
-                global_land_use_proj_adjusted.loc["Cropland"] += np.sum(crop_land_projection,
-                                                                axis = 0).values
-
-
+                                                                axis = 0).values + fodder_delta
+                area_land_use_proj_adjusted.loc["Food Crops"] = np.sum(crop_land_projection,
+                                                                axis = 0).values + food_delta
+                global_land_use_proj_adjusted.loc["Food Crops"] += np.sum(crop_land_projection,
+                                                                axis = 0).values + food_delta
 
                 for crop in crop_land_projection.index.to_list():
-                    global_land_use_proj_adjusted_disagg.loc[crop] += crop_land_projection.loc[crop].values
-                    area_land_use_proj_adjusted_disagg.loc[crop] = crop_land_projection.loc[crop].values
+
+                    if np.nansum(crop_land_projection[2017]) != 0:
+                        ratio = crop_land_projection[2017].loc[crop] / np.nansum(crop_land_projection[2017])
+                    else:
+                        ratio = 0
+
+
+                    global_land_use_proj_adjusted_disagg.loc[crop] += (crop_land_projection.loc[crop] + (food_delta * ratio)).values
+                    area_land_use_proj_adjusted_disagg.loc[crop] = (crop_land_projection.loc[crop] + (food_delta * ratio)).values
 
                 for crop in fodder_land_projection.index.to_list():
+
+                    if np.nansum(fodder_land_projection[2017]) != 0:
+                        ratio = fodder_land_projection[2017].loc[crop] / np.nansum(fodder_land_projection[2017])
+                    else:
+                        ratio = 0
 
                     crop_conv = {
                                 "Other feed" : "Other",
@@ -127,12 +156,12 @@ def main(area_index):
 
                     global_land_use_proj_adjusted_disagg.loc[crop_x] = np.nansum([
                                 global_land_use_proj_adjusted_disagg.loc[crop_x],
-                                fodder_land_projection.loc[crop].values],
+                                (fodder_land_projection.loc[crop] + (fodder_delta * ratio)).values],
                                 axis = 0)
 
                     area_land_use_proj_adjusted_disagg.loc[crop_x] = np.nansum([
                                     area_land_use_proj_adjusted_disagg.loc[crop_x],
-                                    fodder_land_projection.loc[crop].values],
+                                    (fodder_land_projection.loc[crop] + (fodder_delta * ratio)).values],
                                     axis = 0)
 
                 try:
@@ -149,11 +178,7 @@ def main(area_index):
                     pasture_hist = land_use_dat_area.xs(
                                             "Country area", level = "Item") * 0
                     past_not.append(area)
-                # try:
-                #     pasture_hist_temp = land_use_dat_area.xs("Land under temp. meadows and pastures", level = "Item").values[0]
-                #     global_land_use_hist.loc["Pasture"] += pasture_hist_temp
-                # except KeyError:
-                #     pasture_hist_temp = 0
+
 
                 pasture_hist = pasture_hist * 1000
 

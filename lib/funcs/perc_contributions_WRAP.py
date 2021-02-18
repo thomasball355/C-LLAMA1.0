@@ -63,7 +63,6 @@ def percentage_contributions(
         if sum[col] == 0.0:
             input[col] = np.nan
             discard += 1
-            #print(f"No data for year {col}; {input}.")
         input[col] = input[col] / sum [col]
     output = pd.DataFrame(index = input.index, columns = np.arange(data_end, end_year + 1, 1))
     for item in input.index:

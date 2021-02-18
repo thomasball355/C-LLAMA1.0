@@ -50,7 +50,7 @@ def main(continent, region, area, path):
         if r**2 > 0.2 and p < 0.05 and slope > 0:
             output_data.loc[crop] = [regional_min if lin2(x) < regional_min else regional_max if lin2(x) > regional_max else lin2(x) for x in output_data.columns.to_list()]
         else:
-            output_data.loc[crop] = data.loc[crop].astype(float).iloc[-10:-1].mean()
+            output_data.loc[crop] = data.loc[crop].astype(float).iloc[-5:-1].mean()
 
         if np.sum(data.loc[crop]) > 0:
             max_list[crop] = regional_max
