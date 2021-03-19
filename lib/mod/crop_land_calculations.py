@@ -103,14 +103,20 @@ def main(area_index):
                     else:
                         fodder_yield.loc[crop] = crop_yield_projection.loc[crop]
                     if fodder_yield.loc[crop].isnull().values.any() == True and fodder_production_quota.loc[crop].sum(axis = 0) > 0:
-                        fodder_yield.loc[crop] = fodder_crops_properties.loc[crop]["fallback_yield"]
+                        try:
+                            fodder_yield.loc[crop] = fodder_crops_properties.loc[crop]["fallback_yield"]
+                        except KeyError:
+                            fodder_yield.loc[crop] = fodder_crops_properties.loc[crop_conv]["fallback_yield"]
 
                 fodder_production_quota = fodder_production_quota.fillna(0) # MJ / year
                 fodder_production_quota_mass = pd.DataFrame(columns = fodder_production_quota.columns, index = fodder_production_quota.index)
 
                 for crop in fodder_crops_list:
 
-                    energy_density = fodder_crops_properties.loc[crop_conv]["energy_density"] # MJ / kg
+                    try:
+                        energy_density = fodder_crops_properties.loc[crop_conv]["energy_density"] # MJ / kg
+                    except KeyError:
+                        energy_density = fodder_crops_properties.loc[crop]["energy_density"] # MJ / kg
                     energy_density = energy_density * 1000 # MJ / tonne
                     fodder_production_quota_mass.loc[crop] = fodder_production_quota.loc[crop] / energy_density # tonnes / year
 

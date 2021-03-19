@@ -5,7 +5,7 @@ fodder_crops = ["Maize and products",
                 "Soyabeans",
                 "Pulses",
                 "Rice (Milled Equivalent)",
-                "Sugar beet",
+                "Sugar & Sweeteners",
                 "Potatoes and products",
                 "Cassava and products",
                 "Fruits - Excluding Wine"]

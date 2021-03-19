@@ -51,7 +51,6 @@ def main(data, continent, region, area, path):
                 dev_metric_proj = [0.0 if hist_mean <= 0.0 else hist_mean if hist_mean <= 1.0 else 1.0 for x in range(2013, 2051)]
         else:
             dev_metric_proj = [0.0 if hist_mean <= 0.0 else hist_mean if hist_mean <= 1.0 else 1.0 for x in range(2013, 2051)]
-
         return dev_metric_proj
 
     dev_metric_proj = linear_interpolate()

@@ -95,20 +95,27 @@ def main(continent, region, area, path):
 
     io.save(f"{path}\\food_waste", f"waste_ratios_{area}", waste_variables)
 
+
     def fed_without_forage_1():
 
         fed_without_forage_dev = lib.dat.livestock_params.fed_without_forage_developed
         fed_without_forage_udev = lib.dat.livestock_params.fed_without_forage_developing
-        fed_without_forage = pd.DataFrame(index = fed_without_forage_udev, columns = waste_variables.columns)
 
+        #factor = io.load(".", "sfwfval")
+
+        fed_without_forage = pd.DataFrame(index = fed_without_forage_udev, columns = waste_variables.columns)
         for item in fed_without_forage_dev:
-            val = lambda x: fed_without_forage_udev[item] + (fed_without_forage_dev[item] - fed_without_forage_udev[item]) * x
-            fed_without_forage.loc[item] = [val(x) for x in dev_metric]
+
+            fwfi = float(fed_without_forage_dev[item])
+            fwfs = float(fed_without_forage_udev[item])
+            val = lambda x: fwfs + ((fwfi - fwfs) * x)
+            #val = lambda x: fwfs + ((fwfi - fwfs) * (x * factor))
+            fed_without_forage.loc[item] = [fwfs if val(x) < fwfs else val(x) if val(x) < fwfi else fwfi for x in dev_metric]
+            #fed_without_forage.loc[item] = [fwfs for x in dev_metric]
 
         io.save(f"{path}\\livestock", f"fed_without_forage_{area}", fed_without_forage)
 
     fed_without_forage_1()
-
 
     def plot():
         area_list = ["CHINAMAINLAND", "UNITEDSTATESOFAMERICA", "BELIZE", "BRAZIL", "NIGERIA", "CONGO"]

@@ -31,5 +31,7 @@ waste_start_params =     {
                     "other_waste_to_feed_high_dev"  : 0.00 #0.40,
                     }
 
+import lib.funcs.dat_io as io
+
 land_use_data_out_path = "..\\land_use_out"
-land_use_data_out_name = "baseline_no_wtf"
+land_use_data_out_name = "baseline" #io.load(".", "sfwflabel")

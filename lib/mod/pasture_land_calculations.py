@@ -27,7 +27,7 @@ def main(area_index):
     plot_total_pasture_area = pd.DataFrame(columns = np.arange(2013, 2051, 1), index = area_index.index.to_list())
     plot_total_pasture_area_diff = pd.DataFrame(columns = np.arange(2013, 2051, 1), index = area_index.index.to_list())
     plot_total_pasture_hist = pd.DataFrame(columns = np.arange(1961, 2018, 1), index = area_index.index.to_list())
-
+    anchor_vals = pd.read_csv("lib\\dat\\anchor_past_scale_vals.csv", index_col = 0)
     conversion_ratios = pd.read_csv("data\\wirsenius_2010_FCR_livestock.csv", index_col=[
                                     "Animal system and parameter", "Scenario"])  # from https://doi.org/10.1016/j.agsy.2010.07.005
 
@@ -188,7 +188,7 @@ def main(area_index):
                     max = np.max(dat_2)
                     effective_pasture_mass_yield_projected = [min if val(x) <= min else val(x) for x in np.arange(2013, 2051, 1)] # if val(x) <= max else max
                 else:
-                    effective_pasture_mass_yield_projected = [np.mean(effective_pasture_yield_hist.loc[area].values[-years:]) for x in np.arange(2013, 2051, 1)]
+                    effective_pasture_mass_yield_projected = [np.mean(effective_pasture_yield_hist.loc[area].values[-10:]) for x in np.arange(2013, 2051, 1)]
 
                 def plot():
                     plt.plot(np.arange(2013, 2051, 1), effective_pasture_mass_yield_projected)
@@ -241,12 +241,13 @@ def main(area_index):
 
                     return line
 
-                total_pasture_area = (np.sum(pasture_mass_demand_projection, axis = 0) / 1) / effective_pasture_mass_yield_projected # hectares
-                plot_total_pasture_area.loc[area] = total_pasture_area
-                delta_area = total_pasture_area - total_pasture_area.values[0]
-                val = lambda x: x + total_pasture.values[0][-4]
-                plot_total_pasture_area_diff.loc[area] = [0 if val(x) < 0 else val(x) for x in delta_area]
-                plot_total_pasture_hist.loc[area] = total_pasture.values[0]
+                import model_params
 
+                pasture_area_projected = (np.sum(pasture_mass_demand_projection, axis = 0) / 1) / effective_pasture_mass_yield_projected # hectares
+                pasture_2017_val = (total_pasture * 1000).values[0][-1]
+                projected_start_val = anchor_vals.loc[area, "2017"]
+                scaling = pasture_2017_val / projected_start_val
+                adjusted_epmyp = effective_pasture_mass_yield_projected / scaling
+                adjusted_pasture_area_projected = np.sum(pasture_mass_demand_projection, axis = 0) / adjusted_epmyp
 
-                io.save(f"{path}\\land_use", f"pasture_area_{area}", total_pasture_area)
+                io.save(f"{path}\\land_use", f"pasture_area_{area}", adjusted_pasture_area_projected)

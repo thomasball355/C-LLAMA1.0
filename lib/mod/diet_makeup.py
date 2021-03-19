@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from numba import jit
 
 import lib.funcs.perc_contributions_WRAP
 import lib.funcs.dat_io as io
@@ -21,7 +22,6 @@ veg_change              = model_params.veg_change
 non_dairy_animal_change = model_params.non_dairy_animal_change
 
 ##################################################
-
 
 def main(data, continent, region, area, path):
 

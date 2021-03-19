@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import os
 
-
 def dirs(directory, *args):
     string = f"{directory}\\"
     for arg in args:

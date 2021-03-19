@@ -61,6 +61,7 @@ fed_without_forage_developing =   {
                                     "Eggs"              : 0.64,
                                     "Dairy"             : 0.32
                                     }
+
 fwf_FALAFEL = {
                 "Dairy"	                :0.40,
                 "Bovine Meat"	        :0.45,

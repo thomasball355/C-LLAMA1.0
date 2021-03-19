@@ -5,7 +5,6 @@ import sys
 import subprocess
 import pkg_resources
 
-
 while True:
     try:
         import sys
@@ -41,6 +40,7 @@ import lib.dat.food_commodity_seperation as fcs
 
 # sort the population data from the IIASA data into a more usable format for
 # the model
+
 def population_sort():
 
     dat = pd.read_excel("data\\iamc_db_SSP2.xlsx", index_col = [0, 1, 2, 3, 4, 24])
@@ -109,7 +109,6 @@ def population_sort():
         return dat_interpolate
 
     io.save("lib\\dat\\population", "SSP2_population_trajectory_interpolated", pop_interpolate(pop_dat_out))
-
 
 def generate_area_index():
 

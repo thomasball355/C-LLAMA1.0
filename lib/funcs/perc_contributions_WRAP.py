@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import random
 
 
-
 def historic_ratio(input):
     output = pd.DataFrame(index = input.index, columns = input.columns)
     sum = np.sum(input, axis = 0)
@@ -17,6 +16,7 @@ def historic_ratio(input):
             #print(f"No data for year {col}; {input}.")
         output[col] = input[col] / sum[col]
     return output
+
 
 def percentage_contributions_II(
                             input,
@@ -47,6 +47,7 @@ def percentage_contributions_II(
             output[col] = output[col] / np.sum(output, axis = 0)[col]
 
     return output
+
 
 def percentage_contributions(
                             input,

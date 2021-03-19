@@ -95,14 +95,15 @@ def main(area_index):
                 global_land_use_proj.loc["Food Crops"] += np.sum(crop_land_projection,
                                                                 axis = 0).values
 
-                adjust = True
+                adjust = True   # not perfect - difficult to inform ratio of
+                                # fodder to non-fodder in a meaningful way
                 if adjust == True:
                     crop_hist = land_use_dat_area.xs("Cropland", level = "Item") * 1000
                     crop_recent_val = crop_hist.values[0][-1]
                     try:
                         food_ratio = area_land_use_proj[2017].loc["Food Crops"] /\
                                     (area_land_use_proj[2017].loc["Food Crops"] +\
-                                    area_land_use_proj[2017].loc["Fodder Crops"])
+                                    area_land_use_proj[2017].loc["Fodder Crops"]) * 1.3
                     except ZeroDivisionError:
                         food_ratio = 0.7
                     fodder_ratio = 1 - food_ratio
@@ -113,7 +114,6 @@ def main(area_index):
                 else:
                     food_delta = 0
                     fodder_delta = 0
-
 
                 area_land_use_proj_adjusted.loc["Fodder Crops"] = np.sum(fodder_land_projection,
                                                                         axis = 0).values + fodder_delta
@@ -130,7 +130,6 @@ def main(area_index):
                         ratio = crop_land_projection[2017].loc[crop] / np.nansum(crop_land_projection[2017])
                     else:
                         ratio = 0
-
 
                     global_land_use_proj_adjusted_disagg.loc[crop] += (crop_land_projection.loc[crop] + (food_delta * ratio)).values
                     area_land_use_proj_adjusted_disagg.loc[crop] = (crop_land_projection.loc[crop] + (food_delta * ratio)).values
@@ -179,35 +178,11 @@ def main(area_index):
                                             "Country area", level = "Item") * 0
                     past_not.append(area)
 
+                area_land_use_proj_adjusted.loc["Pasture"] = pasture_land_projection
+                area_land_use_proj_adjusted_disagg.loc["Pasture"] = pasture_land_projection
 
-                pasture_hist = pasture_hist * 1000
-
-
-                pasture_land_projection_adjusted = pasture_land_projection\
-                                                + (pasture_hist.values[0][-1]\
-                                                - pasture_land_projection.iloc[5])
-                pasture_land_projection_adjusted = [pasture_hist.values[0][-5 + i]\
-                                                    if i < 5 else\
-                                                    pasture_land_projection_adjusted.iloc[i]\
-                                                    for i in np.arange(0, 2051 - 2013, 1)]
-
-                area_land_use_proj_adjusted.loc["Pasture"] = pasture_land_projection_adjusted
-                area_land_use_proj_adjusted_disagg.loc["Pasture"] = pasture_land_projection_adjusted
-
-                global_land_use_proj_adjusted.loc["Pasture"] += pasture_land_projection_adjusted
-                global_land_use_proj_adjusted_disagg.loc["Pasture"] += pasture_land_projection_adjusted
-
-
-                # if area in ["UNITEDSTATESOFAMERICA", "CANADA", "BRAZIL", "UNITEDKINGDOM", "FRANCE", "CHINA", "RUSSIA"]:
-                #     plt.plot(np.arange(2013, 2051, 1), pasture_land_projection_adjusted)
-                #     plt.plot(np.arange(1961, 2019, 1), pasture_hist.values[0])
-                #     plt.show()
-                # if pasture_land_projection_adjusted[-1] > 1E+09:
-                #     print(area + "!")
-                #     plt.plot(np.arange(2013, 2051, 1), pasture_land_projection_adjusted)
-                #     plt.plot(np.arange(1961, 2019, 1), pasture_hist.values[0])
-                #     plt.show()
-                #     print(land_use_dat_area)
+                global_land_use_proj_adjusted.loc["Pasture"] += pasture_land_projection
+                global_land_use_proj_adjusted_disagg.loc["Pasture"] += pasture_land_projection
 
                 area_land_use_proj_adjusted_disagg = area_land_use_proj_adjusted_disagg\
                             [(area_land_use_proj_adjusted_disagg.T != 0).all()]
@@ -267,6 +242,7 @@ def main(area_index):
 
     out_path = model_params.land_use_data_out_path
     out_name = model_params.land_use_data_out_name
+    #out_name = io.load(".", "sfwflabel")
 
     global_output_dat.to_csv(f"{out_path}\\land_use_{out_name}.csv")
 
