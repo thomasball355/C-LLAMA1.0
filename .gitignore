@@ -10,7 +10,8 @@ data/Europe/*
 data/Asia/*
 data/Oceania/*
 
-
+*.obj
+run_head.py
 # C extensions
 *.so
 
