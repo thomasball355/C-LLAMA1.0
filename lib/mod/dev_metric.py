@@ -17,7 +17,7 @@ def main(data, continent, region, area, path):
 
     total_fs = data.xs("Grand Total", level = "Item").xs("Food supply (kcal/capita/day)", level = "Element").values[0]
 
-    val = lambda x:   ((x / desired_cals) - 0.6) / (0.6)
+    val = lambda x:   ((x / desired_cals) - 0.5) / (0.7)
     # val2 = lambda x:    0.86 * (np.log(x / desired_cals)) + 0.86
 
     dev_metric_hist = [0.0 if val(x) < 0 else val(x) if val(x) <= 1.0 else 1.0 for x in total_fs]

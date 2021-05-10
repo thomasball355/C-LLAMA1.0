@@ -110,6 +110,7 @@ def main(data, continent, region, area, path):
                 for group in vegetal_prods_grouped_list:
                     item_list = comm_group(FAO_comm_groups, group)["Item"]
                     item_list = [x for x in item_list if x not in staple_crops]
+
                     try:
                         group_dat = data.iloc[data.index.get_level_values("Item").isin(item_list)].sum(level = "Area")
                         running_sum = pd.DataFrame(index = group_dat.index.get_level_values("Area"), columns = group_dat.columns.to_list())
@@ -175,9 +176,15 @@ def main(data, continent, region, area, path):
                 remaining = []
                 for item in data.index.get_level_values("Item").to_list():
                     if item not in remaining:
-                        remaining.append(item)
+                        if item in ["Sugar beet", "Sugar cane"]:
+                            pass
+                        else:
+                            remaining.append(item)
 
                 for item in remaining:
+                    if item not in ["Miscellaneous", "Infant food"]:
+                        print(remaining)
+                        quit()
                     food_supp = data.xs(item, level = "Item")
                     try:
                         running_sum = pd.DataFrame(index = group_dat.index.get_level_values("Area"), columns = group_dat.columns.to_list())

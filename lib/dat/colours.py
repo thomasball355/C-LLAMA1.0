@@ -1,5 +1,5 @@
 """ currently un-used. A workable colour scheme for ALL commodities in the model
-is desirable """
+is desirable. However, this one doesn't look very good."""
 
 vegetal_prods = {
                 'Wheat and products'            : "#E7C047",

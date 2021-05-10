@@ -17,7 +17,8 @@ veg_change              = 0.0
 non_dairy_animal_change = 0.0
 
 # Extreme cases for industrialised vs subsistance food systems. Almost no
-# countries lay at zero on the scale.
+# countries lay at zero on the scale. "high_dev" is the industrialised case,
+# (not yet updated to reflect change in naming of industrialisation metric).
 waste_start_params =     {
                     "post_prod_high_dev"      :   0.30,
                     "post_prod_low_dev"       :   0.07,
@@ -25,13 +26,11 @@ waste_start_params =     {
                     "processing_low_dev"      :   0.10,
                     "distribution_high_dev"   :   0.05,
                     "distribution_low_dev"    :   0.50,
-                    "post_prod_to_feed_low_dev"     : 0.00, #0.40,
-                    "post_prod_to_feed_high_dev"    : 0.00, #0.05,
-                    "other_waste_to_feed_low_dev"   : 0.00, #0.15,
-                    "other_waste_to_feed_high_dev"  : 0.00 #0.40,
+                    "post_prod_to_feed_low_dev"     : 0.40, #0.40,
+                    "post_prod_to_feed_high_dev"    : 0.05, #0.05,
+                    "other_waste_to_feed_low_dev"   : 0.15, #0.15,
+                    "other_waste_to_feed_high_dev"  : 0.40 #0.40,
                     }
 
-import lib.funcs.dat_io as io
-
 land_use_data_out_path = "..\\land_use_out"
-land_use_data_out_name = "baseline" #io.load(".", "sfwflabel")
+land_use_data_out_name = "anchor"

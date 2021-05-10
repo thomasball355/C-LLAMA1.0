@@ -6,6 +6,7 @@ vegetal_prods_grouped_list =    [
                                 "Spices",
                                 "Starchy Roots",
                                 "Vegetables",
+                                "Vegetable Oils",
                                 "Sugar & Sweeteners"
                                 ]
 
