@@ -209,24 +209,6 @@ def main(area_index):
                                             area_land_use_proj_adjusted],
                                             axis = 0)
 
-
-
-    def plot_global():
-        global_land_use_proj_adjusted_disagg.T.plot.area()
-        plt.show()
-
-        plt.stackplot(np.arange(2013, 2051, 1),
-                        global_land_use_proj_adjusted.values,
-                        alpha = 0.85,
-                        colors = ["#DF3033", "#309FDF", "#8FDF30"],
-                        labels =    ["Pasture",
-                                    "Fodder crops",
-                                    "Crops for human consumption"]
-                                    )
-        plt.legend()
-        plt.show()
-
-
     index_labels = [cont_labels,
                     region_labels,
                     area_labels,
@@ -242,8 +224,7 @@ def main(area_index):
 
     out_path = model_params.land_use_data_out_path
     out_name = model_params.land_use_data_out_name
-    #out_name = io.load(".", "sfwflabel")
-
+    global_output_dat[global_output_dat < 0] = 0
     global_output_dat.to_csv(f"{out_path}\\land_use_{out_name}.csv")
 
     index_labels = [cont_labels_g,
@@ -258,10 +239,5 @@ def main(area_index):
                                                 "Item", "Unit"])
 
     global_output_dat_grouped.index = idx
-
+    global_output_dat_grouped[global_output_dat_grouped < 0] = 0
     global_output_dat_grouped.to_csv(f"{out_path}\\land_use_grouped_{out_name}.csv")
-
-    # l1 = land_use_dat.index.get_level_values("Area").unique().to_list()
-    # l2 = area_index.index.to_list()
-    #
-    # print(l3)
