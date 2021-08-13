@@ -195,7 +195,7 @@ def generate_area_index():
         p2017 = production_sum["Y2017"].sort_values(ascending = False)
         p2017 = p2017[p2017 > 0]
         perc, k = 0, 0
-        while perc < 99.9997:
+        while perc < 99.99:
             perc = np.sum(p2017[:k]) / np.sum(p2017[:]) * 100
             k += 1
         return p2017[:k].index.to_list()

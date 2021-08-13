@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from numba import jit
 
 import lib.funcs.perc_contributions_WRAP
 import lib.funcs.dat_io as io

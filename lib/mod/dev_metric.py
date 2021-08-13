@@ -55,16 +55,8 @@ def main(data, continent, region, area, path):
 
     dev_metric_proj = linear_interpolate()
 
-    def plot():
-        #area_list = ["CHINAMAINLAND", "UNITEDSTATESOFAMERICA", "NIGER", "BELIZE", "BRAZIL", "JAPAN", "UNITEDKINGDOM", "NIGERIA", "INDIA", "AUSTRALIAANDNEWZEALAND", "CONGO", "ETHOPIA", "CHAD"]
-        if area in area_list:
-            plt.plot(np.arange(1961, 2013 + 1, 1), dev_metric_hist, marker = "x", linewidth = "0")
-            plt.plot(np.arange(2013, 2051, 1), dev_metric_proj)
-            plt.xlabel("Year")
-            plt.ylabel("Metric")
-            plt.ylim(0.0, 1.1)
-            plt.xticks(np.arange(1960, 2051, 10))
-            plt.show()
-    #plot()
+    devmettot = dev_metric_hist + dev_metric_proj
+    devmettotout = pd.DataFrame(data = devmettot, index = np.arange(1960, 2051, 1))
 
     io.save(f"{path}\\dev_metrics", f"dev_metric_{area}", dev_metric_proj)
+    devmettotout.to_csv(f"{path}\\dev_metrics\\dev_metric_{area}.csv")
